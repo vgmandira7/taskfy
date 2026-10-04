@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+
+jobs:
+  ci:
+    name: Lint, tipos e build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar o pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - name: Configurar o Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Instalar dependências
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint (ESLint)
+        run: pnpm run lint
+
+      - name: Formatação (Prettier)
+        run: pnpm run format:check
+
+      - name: Checagem de tipos (tsc --noEmit)
+        run: pnpm run type-check
+
+      - name: Build
+        run: pnpm run build
