@@ -1,0 +1,3 @@
+pnpm --dir backend run lint
+pnpm --dir backend run format:check
+pnpm --dir backend run type-check
