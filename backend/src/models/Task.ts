@@ -12,7 +12,6 @@ export const TASK_STATUS_VALUES: TaskStatus[] = [
 ];
 export const TASK_PRIORITY_VALUES: TaskPriority[] = ['low', 'medium', 'high'];
 
-// Interface que representa a entidade Task (entidade de negócio principal)
 export interface ITask {
   id: number;
   title: string;
@@ -100,6 +99,5 @@ Task.init(
   },
 );
 
-// Uma categoria possui várias tarefas; uma tarefa pertence a uma categoria
 Category.hasMany(Task, { foreignKey: 'categoryId', as: 'tasks' });
 Task.belongsTo(Category, { foreignKey: 'categoryId', as: 'category' });

@@ -11,8 +11,6 @@ export interface ICategory {
   createdAt: Date;
   updatedAt: Date;
 }
-
-// Campos opcionais na criação (gerados automaticamente ou com valor padrão)
 export type CategoryCreationAttributes = Optional<
   ICategory,
   'id' | 'description' | 'color' | 'isActive' | 'createdAt' | 'updatedAt'

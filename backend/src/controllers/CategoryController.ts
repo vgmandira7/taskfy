@@ -19,7 +19,7 @@ export class CategoryController {
     }
   }
 
-  // GET /api/categories/:id - Busca uma categoria por ID (com suas tarefas)
+  // GET /api/categories/:id - Busca uma categoria por ID
   public static async show(req: Request, res: Response): Promise<Response> {
     try {
       const id = parseInt(req.params.id as string, 10);

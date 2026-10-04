@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// Rota de Health Check
+// Rota de Health
 app.get('/api/health', (req: Request, res: Response) => {
   res.status(200).json({
     status: 'OK',
@@ -24,13 +24,13 @@ app.get('/api/health', (req: Request, res: Response) => {
   });
 });
 
-// Documentação interativa (Swagger UI)
+// swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Registra todas as rotas da aplicação sob o prefixo /api
 app.use('/api', appRoutes);
 
-// Rota raiz - conveniência
+// Rota raiz
 app.get('/', (req: Request, res: Response) => {
   res.status(200).json({
     projeto: 'Taskfy API',

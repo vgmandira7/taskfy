@@ -10,7 +10,6 @@ import { Category } from '../models/Category';
 
 export class TaskController {
   // GET /api/tasks - Lista todas as tarefas (com filtros opcionais)
-  // Filtros suportados via query string: ?status=pending&priority=high&categoryId=1
   public static async index(req: Request, res: Response): Promise<Response> {
     try {
       const { status, priority, categoryId } = req.query;

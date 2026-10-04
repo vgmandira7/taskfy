@@ -1,26 +1,27 @@
-# ---------- Base: Node + pnpm ----------
+# Código comentado por IA para facilitar o entendimento
+# Base: Node + pnpm 
 FROM node:24-alpine AS base
 RUN npm install -g pnpm
 WORKDIR /app
 
-# ---------- Dependências (dev + prod) para compilar ----------
+# Dependências (dev + prod) para compilar 
 FROM base AS deps
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm config set strict-dep-builds false \
   && pnpm install --frozen-lockfile
 
-# ---------- Build: TypeScript -> JavaScript ----------
+#  Build: TypeScript -> JavaScript 
 FROM deps AS build
 COPY . .
 RUN pnpm run build
 
-# ---------- Dependências somente de produção ----------
+# Dependências somente de produção 
 FROM base AS prod-deps
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm config set strict-dep-builds false \
   && pnpm install --frozen-lockfile --prod
 
-# ---------- Imagem final enxuta ----------
+# Imagem final enxuta 
 FROM node:24-alpine AS production
 ENV NODE_ENV=production
 WORKDIR /app

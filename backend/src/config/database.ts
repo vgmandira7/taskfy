@@ -3,8 +3,6 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// Habilita SSL apenas quando DB_SSL=true (necessário para bancos em nuvem
-// como o Supabase; desnecessário e geralmente incompatível em ambiente local)
 const isSSL = process.env.DB_SSL === 'true';
 
 const sequelizeOptions: Options = {
