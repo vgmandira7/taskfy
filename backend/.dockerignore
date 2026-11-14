@@ -9,3 +9,10 @@ coverage
 !.env.example
 *.log
 .DS_Store
+
+# Testes
+tests
+test
+__tests__
+*.test.ts
+*.spec.ts
