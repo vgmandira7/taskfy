@@ -18,7 +18,7 @@ app.use(express.json());
 // Rota de Health
 app.get('/api/health', (req: Request, res: Response) => {
   res.status(200).json({
-    status: 'ok',
+    status: 'ok - aprovado',
     uptime: Math.floor(process.uptime()),
     mensagem: 'Taskfy API rodando com sucesso.',
     timestamp: new Date().toISOString(),
