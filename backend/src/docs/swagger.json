@@ -7,8 +7,8 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000/api",
-      "description": "Servidor local de desenvolvimento"
+      "url": "https://taskfy-backend-uxlz.onrender.com/api",
+      "description": "Servidor de Produção (Render)"
     }
   ],
   "tags": [
