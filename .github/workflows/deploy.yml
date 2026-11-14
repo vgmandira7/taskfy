@@ -1,0 +1,77 @@
+name: CI/CD - Deploy no Render
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  # 1) Integração Contínua: tipos + build
+  ci:
+    name: CI - Tipos e build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar o pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - name: Configurar o Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Instalar dependências
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint (ESLint)
+        run: pnpm run lint
+
+      - name: Checagem de tipos (tsc --noEmit)
+        run: pnpm run type-check
+
+      - name: Build (tsc)
+        run: pnpm run build
+
+  # 2) Validação do contêiner: só roda se o CI passou
+  docker-build:
+    name: CD - Build da imagem Docker
+    runs-on: ubuntu-latest
+    needs: ci
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Build da imagem Docker
+        run: docker build -t taskfy-api:${{ github.sha }} ./backend
+
+  # 3) Deploy: só roda se CI e Docker build passaram
+  deploy:
+    name: CD - Disparar Deploy Hook no Render
+    runs-on: ubuntu-latest
+    needs: [ci, docker-build]
+    steps:
+      - name: Acionar o Deploy Hook (POST)
+        env:
+          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$RENDER_DEPLOY_HOOK_URL" ]; then
+            echo "::error::Secret RENDER_DEPLOY_HOOK_URL não configurado."
+            exit 1
+          fi
+
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$RENDER_DEPLOY_HOOK_URL")
+          echo "Status HTTP retornado pelo Deploy Hook: $STATUS"
+
+          if [ "$STATUS" != "200" ] && [ "$STATUS" != "201" ]; then
+            echo "::error::Falha ao disparar o deploy (HTTP $STATUS)."
+            exit 1
+          fi
+
+          echo "Deploy disparado com sucesso no Render."
