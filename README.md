@@ -55,7 +55,8 @@ Este projeto atende integralmente aos requisitos das seguintes disciplinas:
 │   └── pre-commit                # Git Hook de validação local
 ├── docker-compose.yml            # Orquestração de contêineres
 ├── package.json                  # Gerenciamento do Husky na raiz
-└── backend/                      # Código-fonte da aplicação
+├── frontend/                     # SPA React + TypeScript + shadcn/ui (AT2)
+└── backend/                      # Código-fonte da API
     ├── Dockerfile                # Receita de containerização da API
     ├── .env.example              # Template de variáveis de ambiente
     ├── eslint.config.mjs         # Regras do linter
@@ -335,11 +336,32 @@ O `docker-compose.yml` é responsável por orquestrar os serviços e configurar 
 ---
 
 
+## 🖥️ Frontend (LDW — AT2)
+
+Interface web (SPA) que consome esta API, construída com **React, TypeScript, Vite, Tailwind CSS e shadcn/ui**. Permite listar, criar, editar e excluir **tarefas** e **categorias**, com loading, estado vazio e notificações (toasts).
+
+Para executar:
+
+```bash
+# 1. API + banco (na raiz do repositório)
+docker compose up -d
+
+# 2. Frontend
+cd frontend
+pnpm install
+cp .env.example .env
+pnpm dev
+```
+
+Acesse **http://localhost:5173**. Detalhes de arquitetura, variáveis de ambiente e mapeamento CRUD ↔ endpoints estão em [`frontend/README.md`](./frontend/README.md).
+
+---
+
 ## 👨‍💻 Projeto Acadêmico
 
 Projeto desenvolvido para fins acadêmicos como parte das atividades das disciplinas:
 
-* **LDW — Laboratório de Desenvolvimento Web**
+* **LDW — Laboratório de Desenvolvimento Web** (AT1: API · AT2: Frontend)
 * **IEC — Integração e Entrega Contínua**
 
 O projeto tem como foco unir **desenvolvimento backend**, **persistência de dados**, **containerização**, **qualidade de código** e **automação de processos de integração contínua**.
