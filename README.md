@@ -365,3 +365,29 @@ Projeto desenvolvido para fins acadêmicos como parte das atividades das discipl
 * **IEC — Integração e Entrega Contínua**
 
 O projeto tem como foco unir **desenvolvimento backend**, **persistência de dados**, **containerização**, **qualidade de código** e **automação de processos de integração contínua**.
+
+---
+
+## ☁️ Entrega Contínua (AT2 - IEC): Docker + GitHub Actions + Render
+
+**API em produção:** `https://SEU-SERVICO.onrender.com` (substitua pelo link do seu Web Service)
+Health check: `https://SEU-SERVICO.onrender.com/api/health`
+
+### Fluxo
+
+`push na main` → **CI** (lint, `tsc --noEmit`, build) → **Docker build** → **POST no Deploy Hook do Render** (só se tudo anterior passou).
+
+O workflow está em `.github/workflows/deploy.yml`. O `ci.yml` continua validando as demais branches e PRs.
+
+### Configuração no Render
+
+1. **New > Web Service** conectado a este repositório, **Language/Runtime: Docker**.
+2. **Root Directory:** `backend` (o Dockerfile fica em `backend/Dockerfile`).
+3. **Auto-Deploy: No** (o deploy só acontece pelo webhook).
+4. **Advanced > Health Check Path:** `/api/health`.
+5. **Environment:** `NODE_ENV=production`, `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_SSL=true` (a porta é injetada pelo Render via `PORT`).
+6. **Settings > Deploy Hook:** copie a URL (`https://api.render.com/deploy/srv-xxxx?key=yyyy`).
+
+### Configuração no GitHub
+
+Em **Settings > Secrets and variables > Actions > New repository secret**, crie `RENDER_DEPLOY_HOOK_URL` com a URL do Deploy Hook.
